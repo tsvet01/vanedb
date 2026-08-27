@@ -121,26 +121,51 @@ jobs:
     - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pytest numpy
+        python -m pip install build pytest numpy
 
-    - name: Configure and build with Python bindings
+    - name: Build wheel
       run: |
-        cmake -B build -DCMAKE_BUILD_TYPE=Release -DVANEDB_BUILD_PYTHON=ON -DVANEDB_BUILD_TESTS=OFF -DVANEDB_BUILD_BENCHMARKS=OFF -DVANEDB_BUILD_EXAMPLES=OFF
+        python -m build --wheel --outdir wheelhouse
 
-    - name: Build
+    - name: Inspect wheel contents
+      shell: bash
       run: |
-        cmake --build build --config Release --parallel
+        python - <<'PY'
+        from pathlib import Path, PurePosixPath
+        from zipfile import ZipFile
 
-    - name: Run Python tests (Unix)
-      if: runner.os != 'Windows'
-      run: |
-        PYTHONPATH=build pytest tests/test_python_bindings.py -v
+        wheels = list(Path("wheelhouse").glob("*.whl"))
+        if len(wheels) != 1:
+            raise SystemExit(f"expected exactly one wheel, found: {wheels}")
 
-    - name: Run Python tests (Windows)
-      if: runner.os == 'Windows'
+        with ZipFile(wheels[0]) as wheel:
+            extensions = [
+                PurePosixPath(name)
+                for name in wheel.namelist()
+                if PurePosixPath(name).name.startswith("vanedb_py")
+                and PurePosixPath(name).suffix in {".so", ".pyd"}
+            ]
+
+        if len(extensions) != 1 or len(extensions[0].parts) != 1:
+            raise SystemExit(
+                "expected exactly one root-level vanedb_py .so/.pyd, "
+                f"found: {extensions}"
+            )
+        print(f"verified wheel extension: {extensions[0]}")
+        PY
+
+    - name: Install wheel
+      shell: bash
       run: |
-        $env:PYTHONPATH = "build\Release"
-        pytest tests/test_python_bindings.py -v
+        python -m pip install --force-reinstall --no-deps wheelhouse/*.whl
+
+    - name: Verify installed import
+      run: |
+        python -I -c "import vanedb_py; print(vanedb_py.__file__)"
+
+    - name: Run Python tests from installed wheel
+      run: |
+        python -m pytest tests/test_python_bindings.py -v
 
   sanitizers:
     name: Sanitizer Checks (${{ matrix.sanitizer }})

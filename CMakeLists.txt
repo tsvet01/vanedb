@@ -223,5 +223,8 @@ if(VANEDB_BUILD_PYTHON)
     $<$<CXX_COMPILER_ID:MSVC>:/W4 /arch:AVX2>
     $<$<AND:$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>,$<BOOL:${VANEDB_X86_64}>>:-mavx2 -mfma>
   )
+  install(TARGETS vanedb_py
+    LIBRARY DESTINATION .
+    RUNTIME DESTINATION .
+  )
 endif() # VANEDB_BUILD_PYTHON
-
