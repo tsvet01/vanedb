@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- PyPI upload for the supplementary `vanedb-cpp` distribution is manual-only
+  while the generic x86-64 CPU baseline remains unresolved (#39). GitHub
+  releases continue to build and retain wheel artifacts.
 - **BREAKING: Project renamed from QuiverDB to VaneDB.** Pre-1.0, so no
   on-disk break — HNSW index files written with the old name still load
   (the `0x51565244` "QVRD" magic is retained for backward compat). What

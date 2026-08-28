@@ -214,6 +214,7 @@ if(VANEDB_BUILD_PYTHON)
     pybind11
     GIT_REPOSITORY https://github.com/pybind/pybind11.git
     GIT_TAG v3.1.0
+    GIT_SHALLOW TRUE
   )
   FetchContent_MakeAvailable(pybind11)
 

@@ -43,7 +43,7 @@ jobs:
         # Test the wheels
         CIBW_TEST_REQUIRES: pytest numpy
         CIBW_TEST_COMMAND: pytest {project}/tests/test_python_bindings.py -v
-        # macOS: Build universal2 wheels for Apple Silicon + Intel
+        # macOS: Build separate Apple Silicon and Intel wheels
         CIBW_ARCHS_MACOS: x86_64 arm64
         # Linux: Build for x86_64
         CIBW_ARCHS_LINUX: x86_64
