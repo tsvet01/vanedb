@@ -58,7 +58,9 @@ index.save("index.bin");
 ```
 
 ```python
-import vanedb_py as vanedb
+# Supplementary C++ bindings; the canonical Python package is `vanedb`.
+# python -m pip install vanedb-cpp
+import vanedb_cpp as vanedb
 import numpy as np
 
 index = vanedb.HNSWIndex(768, vanedb.DistanceMetric.COSINE)

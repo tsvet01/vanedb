@@ -8,6 +8,9 @@ Embeddable vector database for edge AI. Header-only C++20, SIMD-optimized, cross
 This is the **C++ header-only** implementation. The Rust implementation lives at
 [vanedb/vanedb](https://github.com/vanedb/vanedb) and is the primary entry point
 for Rust (`cargo add vanedb`), Python (`pip install vanedb`), and WASM consumers.
+This implementation also provides supplementary Python bindings as
+`pip install vanedb-cpp` / `import vanedb_cpp`; it does not own the canonical
+`vanedb` PyPI name.
 
 **Why two implementations:**
 - **C++** (this repo): drop a header into any CMake/Bazel project. No Rust toolchain
@@ -113,15 +116,17 @@ This repo accepts:
 - New platform/compiler support (CI matrix expansion)
 - On-disk format additions that mirror the Rust repo (so files are
   interchangeable when feasible)
+- Packaging and release fixes for the supplementary `vanedb-cpp` Python
+  distribution
 
 This repo defers to the Rust repo for:
 - New high-level features (batch search API, metadata filtering, PQ, sharding)
 - Language bindings beyond Python (Node/WASM, Swift, Go)
-- Package distribution work (PyPI naming, npm)
+- Canonical `vanedb` PyPI distribution work and npm packaging
 
 Check [vanedb/vanedb](https://github.com/vanedb/vanedb) issues before filing
-feature requests here. PyPI distribution (`pip install vanedb`), WASM, and
-batch/metadata APIs are tracked there.
+feature requests here. The canonical PyPI distribution (`pip install vanedb`),
+WASM, and batch/metadata APIs are tracked there.
 
 ## Known Limitations
 - No deletion in HNSWIndex (rebuild required)

@@ -8,12 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- PyPI upload for the supplementary `vanedb-cpp` distribution is manual-only
+  while the generic x86-64 CPU baseline remains unresolved (#39). GitHub
+  releases continue to build and retain wheel artifacts.
 - **BREAKING: Project renamed from QuiverDB to VaneDB.** Pre-1.0, so no
   on-disk break — HNSW index files written with the old name still load
   (the `0x51565244` "QVRD" magic is retained for backward compat). What
   *did* change for downstream consumers:
   - C++ namespace: `quiverdb::` → `vanedb::`
-  - Python module: `import quiverdb_py` → `import vanedb_py`
+  - Python module: `import quiverdb_py` → `import vanedb_cpp`
   - CMake options: `QUIVERDB_BUILD_*` → `VANEDB_BUILD_*`
   - Preprocessor macros injected by callers (e.g. `-DQUIVER_CUDA_ENABLED`)
     → `-DVANE_CUDA_ENABLED`
@@ -22,6 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     (GitHub redirects the old URL).
 
 ### Added
+- Supplementary Python distribution: `pip install vanedb-cpp`, imported as
+  `vanedb_cpp`. The Rust bindings remain the canonical `vanedb` distribution.
 - Comprehensive corruption detection tests for file format validation
   - Invalid magic number, version, metric detection
   - Size overflow protection tests (SIZE_MAX scenarios)

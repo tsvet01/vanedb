@@ -117,21 +117,27 @@ auto results = store.search(query, 5);
 
 ## Python Bindings
 
-### Installation (from source)
+### Installation
+
+The Rust-backed `vanedb` distribution is the canonical Python package. To use
+these supplementary C++ bindings instead:
 
 ```bash
-git clone https://github.com/tsvet01/vanedb.git
-cd vanedb
-cmake -B build -DCMAKE_BUILD_TYPE=Release -DVANEDB_BUILD_PYTHON=ON
-cmake --build build --parallel
+python -m pip install vanedb-cpp
+```
 
-export PYTHONPATH=$PWD/build:$PYTHONPATH
+From source:
+
+```bash
+git clone https://github.com/vanedb/vanedb-cpp.git
+cd vanedb-cpp
+python -m pip install .
 ```
 
 ### Usage
 
 ```python
-import vanedb_py as vanedb
+import vanedb_cpp as vanedb
 import numpy as np
 
 # Check version
