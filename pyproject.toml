@@ -1,7 +1,7 @@
 [project]
-name = "vanedb"
+name = "vanedb-cpp"
 version = "0.1.0"
-description = "Embeddable vector database for edge AI and local-first applications"
+description = "Supplementary C++ Python bindings for VaneDB"
 readme = "README.md"
 requires-python = ">=3.9"
 license = {text = "MIT"}
@@ -9,6 +9,7 @@ authors = [
     {name = "Anton Tsvetkov"}
 ]
 keywords = ["vector", "database", "embedding", "hnsw", "similarity-search", "machine-learning"]
+dependencies = ["numpy>=1.24"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -25,7 +26,7 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=7.0", "numpy>=1.24"]
+dev = ["pytest>=7.0"]
 
 [build-system]
 requires = ["scikit-build-core>=0.4.3", "pybind11>=3.1"]
@@ -33,6 +34,7 @@ build-backend = "scikit_build_core.build"
 
 [tool.scikit-build]
 cmake.build-type = "Release"
+wheel.exclude = ["include/**", "lib/**"]
 
 [tool.scikit-build.cmake.define]
 VANEDB_BUILD_TESTS = "OFF"

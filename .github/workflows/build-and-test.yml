@@ -137,19 +137,30 @@ jobs:
         wheels = list(Path("wheelhouse").glob("*.whl"))
         if len(wheels) != 1:
             raise SystemExit(f"expected exactly one wheel, found: {wheels}")
+        if "abi3" in wheels[0].name:
+            raise SystemExit(f"wheel falsely claims the stable ABI: {wheels[0].name}")
 
         with ZipFile(wheels[0]) as wheel:
+            contents = [PurePosixPath(name) for name in wheel.namelist()]
             extensions = [
-                PurePosixPath(name)
-                for name in wheel.namelist()
-                if PurePosixPath(name).name.startswith("vanedb_py")
-                and PurePosixPath(name).suffix in {".so", ".pyd"}
+                path
+                for path in contents
+                if path.name.startswith("vanedb_cpp")
+                and path.suffix in {".so", ".pyd"}
+            ]
+            development_artifacts = [
+                path for path in contents if path.parts[0] in {"include", "lib"}
             ]
 
         if len(extensions) != 1 or len(extensions[0].parts) != 1:
             raise SystemExit(
-                "expected exactly one root-level vanedb_py .so/.pyd, "
+                "expected exactly one root-level vanedb_cpp .so/.pyd, "
                 f"found: {extensions}"
+            )
+        if development_artifacts:
+            raise SystemExit(
+                "wheel unexpectedly contains C++ development artifacts: "
+                f"{development_artifacts}"
             )
         print(f"verified wheel extension: {extensions[0]}")
         PY
@@ -161,7 +172,7 @@ jobs:
 
     - name: Verify installed import
       run: |
-        python -I -c "import vanedb_py; print(vanedb_py.__file__)"
+        python -I -c "import vanedb_cpp; print(vanedb_cpp.__file__)"
 
     - name: Run Python tests from installed wheel
       run: |

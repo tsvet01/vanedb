@@ -217,13 +217,13 @@ if(VANEDB_BUILD_PYTHON)
   )
   FetchContent_MakeAvailable(pybind11)
 
-  pybind11_add_module(vanedb_py MODULE python/vanedb.cpp)
-  target_link_libraries(vanedb_py PRIVATE vanedb pybind11::module)
-  target_compile_options(vanedb_py PRIVATE
+  pybind11_add_module(vanedb_cpp MODULE python/vanedb.cpp)
+  target_link_libraries(vanedb_cpp PRIVATE vanedb pybind11::module)
+  target_compile_options(vanedb_cpp PRIVATE
     $<$<CXX_COMPILER_ID:MSVC>:/W4 /arch:AVX2>
     $<$<AND:$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>,$<BOOL:${VANEDB_X86_64}>>:-mavx2 -mfma>
   )
-  install(TARGETS vanedb_py
+  install(TARGETS vanedb_cpp
     LIBRARY DESTINATION .
     RUNTIME DESTINATION .
   )

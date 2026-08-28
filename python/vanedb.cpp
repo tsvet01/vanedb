@@ -10,7 +10,7 @@
 namespace py = pybind11;
 using namespace vanedb;
 
-PYBIND11_MODULE(vanedb_py, m) {
+PYBIND11_MODULE(vanedb_cpp, m) {
     m.doc() = "VaneDB - Embeddable vector database for edge AI";
 
     // Version info
