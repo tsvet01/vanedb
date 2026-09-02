@@ -1,86 +1,26 @@
-<div align="center">
+# vanedb-cpp has moved
 
-# VaneDB
+This repository is **archived**. Development continues in the VaneDB monorepo:
 
-**Embeddable vector database for edge AI**
+### → [github.com/vanedb/vanedb](https://github.com/vanedb/vanedb) — in [`cpp/`](https://github.com/vanedb/vanedb/tree/main/cpp)
 
-[![Build](https://github.com/vanedb/vanedb-cpp/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/vanedb/vanedb-cpp/actions/workflows/build-and-test.yml)
-[![codecov](https://codecov.io/gh/vanedb/vanedb-cpp/branch/main/graph/badge.svg)](https://codecov.io/gh/vanedb/vanedb-cpp)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![C++20](https://img.shields.io/badge/C%2B%2B-20-00599C.svg)](https://en.cppreference.com/w/cpp/20)
-[![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-3776AB.svg)](https://www.python.org/)
+## Why
 
-</div>
+The Rust and C++ engines share one contract: the same distance semantics, the
+same persistence format, and the same search-quality expectations. Keeping them
+in separate repositories meant the same bug was filed, fixed, and reviewed
+twice — the cosine and non-finite-ordering defects existed independently in
+both engines before consolidation. They are now fixed once, against shared
+fixtures in [`conformance/`](https://github.com/vanedb/vanedb/tree/main/conformance)
+that both engines must satisfy.
 
----
+## What moved
 
-Header-only C++20 vector database with SIMD acceleration. Runs on Linux, macOS, Windows, iOS, and Android.
+- **Code** — every file now lives under [`cpp/`](https://github.com/vanedb/vanedb/tree/main/cpp).
+- **History** — imported commit by commit, not squashed. Old commit IDs map to
+  new ones in [`docs/migration/vanedb-cpp-commit-map.txt`](https://github.com/vanedb/vanedb/blob/main/docs/migration/vanedb-cpp-commit-map.txt).
+- **Issues** — transferred or consolidated into the monorepo tracker. Paired
+  Rust/C++ bugs became a single issue labelled for both components.
 
-> **Two implementations.** VaneDB is maintained as both C++ and Rust under the [@vanedb](https://github.com/vanedb) org. This repo is the **C++ header-only** version — drop a header into any CMake project, no Rust toolchain needed. For the Rust crate (with Python/PyO3 and WASM bindings), see **[vanedb/vanedb](https://github.com/vanedb/vanedb)**.
-
-## Why VaneDB?
-
-| Feature | VaneDB | FAISS | hnswlib | Pinecone |
-|---------|----------|-------|---------|----------|
-| Header-only | Yes | No | No | N/A |
-| Mobile/Edge | Native | No | Partial | No |
-| Dependencies | Zero | Many | Few | Cloud |
-| Binary size | <100KB | 200MB+ | ~1MB | N/A |
-| GPU (Metal) | Yes | No | No | N/A |
-
-**Perfect for**: Mobile AI apps, Obsidian/Logseq plugins, edge devices, offline-first applications.
-
-## Features
-
-- **SIMD-optimized**: ARM NEON, x86 AVX2 (~100ns for 768d vectors)
-- **Multiple indexes**: Brute-force, HNSW, Memory-mapped
-- **GPU acceleration**: Metal (Apple Silicon). CUDA (NVIDIA) is experimental — kernel source only, not yet wired into the build
-- **Thread-safe**: Concurrent reads with `std::shared_mutex`
-- **Python bindings**: NumPy integration, GIL-safe
-
-## Quick Start
-
-```cpp
-#include "core/vector_store.h"
-
-vanedb::VectorStore store(768, vanedb::DistanceMetric::COSINE);
-store.add(1, embedding);
-auto results = store.search(query, 5);  // top-5 nearest neighbors
-```
-
-```cpp
-#include "core/hnsw_index.h"
-
-vanedb::HNSWIndex index(768, vanedb::DistanceMetric::COSINE, 100000);
-index.add(1, embedding);
-auto results = index.search(query, 5);
-index.save("index.bin");
-```
-
-```python
-# Supplementary C++ bindings; the canonical Python package is `vanedb`.
-# python -m pip install vanedb-cpp
-import vanedb_cpp as vanedb
-import numpy as np
-
-index = vanedb.HNSWIndex(768, vanedb.DistanceMetric.COSINE)
-index.add(1, np.random.rand(768).astype(np.float32))
-ids, distances = index.search(query, 10)
-```
-
-## Build
-
-```bash
-cmake -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build --parallel
-ctest --test-dir build --output-on-failure
-```
-
-## Documentation
-
-- [Full API Guide](docs/GUIDE.md) - Detailed usage, Python bindings, mobile builds
-- [CHANGELOG](CHANGELOG.md) - Version history
-
-## License
-
-MIT License - see [LICENSE](LICENSE) for details.
+Existing links keep working: GitHub redirects repository, issue, and commit
+URLs. Nothing is deleted — this repository becomes read-only.
